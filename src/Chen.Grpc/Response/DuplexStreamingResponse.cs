@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Grpc.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Chen.Grpc.Response
 {  
@@ -10,15 +12,16 @@ namespace Chen.Grpc.Response
     public struct DuplexStreamingResponse<TRequest, TResponse> : IDisposable
     {
         readonly AsyncDuplexStreamingCall<byte[], byte[]> inner;
-        readonly MarshallingClientStreamWriter<TRequest> requestStream;
-        readonly MarshallingAsyncStreamReader<TResponse> responseStream;
-
-        public DuplexStreamingResult(AsyncDuplexStreamingCall<byte[], byte[]> inner, IFormatterResolver resolver)
-        {
-            this.inner = inner;
-            this.requestStream = new MarshallingClientStreamWriter<TRequest>(inner.RequestStream, resolver);
-            this.responseStream = new MarshallingAsyncStreamReader<TResponse>(inner.ResponseStream, resolver);
-        }
+        //readonly MarshallingClientStreamWriter<TRequest> requestStream;
+        //readonly MarshallingAsyncStreamReader<TResponse> responseStream;
+        IAsyncStreamReader<TResponse> responseStream;
+        IClientStreamWriter<TRequest> requestStream;
+        //public DuplexStreamingResponse(AsyncDuplexStreamingCall<byte[], byte[]> inner, IFormatterResolver resolver)
+        //{
+        //    this.inner = inner;
+        //    this.requestStream = new MarshallingClientStreamWriter<TRequest>(inner.RequestStream, resolver);
+        //    this.responseStream = new MarshallingAsyncStreamReader<TResponse>(inner.ResponseStream, resolver);
+        //}
 
         /// <summary>
         /// Async stream to read streaming responses.

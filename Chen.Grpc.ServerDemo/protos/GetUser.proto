@@ -1,0 +1,27 @@
+﻿syntax = "proto3";
+ 
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.Public";
+option java_outer_classname = "GetUserProto";
+option objc_class_prefix = "HLW";
+ 
+package Public;
+//定义的服务
+service GetUserList {
+ rpc GetList(pharm) returns (Userlist) {}
+}
+//服务的参数
+message pharm {
+  string name = 1;
+}
+ 
+//返回参数
+message Userlist {
+user userinfo=1;
+int32 no=2;
+}
+ 
+message user{
+ string name=1;
+ string detail=2;
+}

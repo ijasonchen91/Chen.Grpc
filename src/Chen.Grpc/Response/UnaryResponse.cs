@@ -26,6 +26,11 @@ namespace Chen.Grpc.Response
             this.rawTaskValue = null;
             this.inner = null;
             //this.resolver = null;
+            Server server = new Server
+            {
+                Services = { gRPC.BindService()}
+            };
+            System.Xml.Serialization.XmlSerializer
         }
 
         public UnaryResponse(Task<TResponse> rawTaskValue)
@@ -61,7 +66,8 @@ namespace Chen.Grpc.Response
             {
                 if (!hasRawValue)
                 {
-                    return Deserialize();
+                    //return Deserialize();
+                    return null;
                 }
                 else if (rawTaskValue != null)
                 {
@@ -85,13 +91,13 @@ namespace Chen.Grpc.Response
             }
         }
 
-        /// <summary>
-        /// Allows awaiting this object directly.
-        /// </summary>
-        public TaskAwaiter<TResponse> GetAwaiter()
-        {
-            return ResponseAsync.GetAwaiter();
-        }
+        ///// <summary>
+        ///// Allows awaiting this object directly.
+        ///// </summary>
+        //public TaskAwaiter<TResponse> GetAwaiter()
+        //{
+        //    return ResponseAsync.GetAwaiter();
+        //}
 
         /// <summary>
         /// Gets the call status if the call has already finished.

@@ -2,22 +2,23 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Chen.Grpc.Response
-{ 
+{
     /// <summary>
     /// Wrapped AsyncServerStreamingCall.
     /// </summary>
     public struct ServerStreamingResponse<TResponse> : IDisposable
     {
         readonly AsyncServerStreamingCall<byte[]> inner;
-        readonly MarshallingAsyncStreamReader<TResponse> responseStream;
-
-        public ServerStreamingResult(AsyncServerStreamingCall<byte[]> inner, IFormatterResolver resolver)
-        {
-            this.inner = inner;
-            this.responseStream = new MarshallingAsyncStreamReader<TResponse>(inner.ResponseStream, resolver);
-        }
+        //readonly MarshallingAsyncStreamReader<TResponse> responseStream;
+        IAsyncStreamReader<TResponse> responseStream;
+        //public ServerStreamingResponse(AsyncServerStreamingCall<byte[]> inner, IFormatterResolver resolver)
+        //{
+        //    this.inner = inner;
+        //    this.responseStream = new MarshallingAsyncStreamReader<TResponse>(inner.ResponseStream, resolver);
+        //}
 
         /// <summary>
         /// Async stream to read streaming responses.

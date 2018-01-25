@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Grpc.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Chen.Grpc.Response
-{ 
+{
     /// <summary>
     /// Wrapped AsyncClientStreamingCall.
     /// </summary>
@@ -12,32 +14,33 @@ namespace Chen.Grpc.Response
         internal readonly TResponse rawValue;
         internal readonly bool hasRawValue;
         readonly AsyncClientStreamingCall<byte[], byte[]> inner;
-        readonly MarshallingClientStreamWriter<TRequest> requestStream;
-        readonly IFormatterResolver resolver;
+        //readonly MarshallingClientStreamWriter<TRequest> requestStream;
+        //readonly IFormatterResolver resolver;
+        readonly IClientStreamWriter<TRequest> requestStream;
 
-        public ClientStreamingResult(TResponse rawValue)
+        public ClientStreamingResponse(TResponse rawValue)
         {
             this.hasRawValue = true;
             this.rawValue = rawValue;
             this.inner = null;
             this.requestStream = null;
-            this.resolver = null;
+            //this.resolver = null; 
         }
 
-        public ClientStreamingResult(AsyncClientStreamingCall<byte[], byte[]> inner, IFormatterResolver resolver)
-        {
-            this.hasRawValue = false;
-            this.rawValue = default(TResponse);
-            this.inner = inner;
-            this.requestStream = new MarshallingClientStreamWriter<TRequest>(inner.RequestStream, resolver);
-            this.resolver = resolver;
-        }
+        //public ClientStreamingResponse(AsyncClientStreamingCall<byte[], byte[]> inner, IFormatterResolver resolver)
+        //{
+        //    this.hasRawValue = false;
+        //    this.rawValue = default(TResponse);
+        //    this.inner = inner;
+        //    this.requestStream = new MarshallingClientStreamWriter<TRequest>(inner.RequestStream, resolver);
+        //    //this.resolver = resolver;
+        //}
 
-        async Task<TResponse> Deserialize()
-        {
-            var bytes = await inner.ResponseAsync.ConfigureAwait(false);
-            return LZ4MessagePackSerializer.Deserialize<TResponse>(bytes, resolver);
-        }
+        //async Task<TResponse> Deserialize()
+        //{
+        //    var bytes = await inner.ResponseAsync.ConfigureAwait(false);
+        //    return LZ4MessagePackSerializer.Deserialize<TResponse>(bytes, resolver);
+        //}
 
         /// <summary>
         /// Asynchronous call result.
@@ -52,7 +55,8 @@ namespace Chen.Grpc.Response
                 }
                 else
                 {
-                    return Deserialize();
+                    //return Deserialize();
+                    return null;
                 }
             }
         }
@@ -79,14 +83,14 @@ namespace Chen.Grpc.Response
             }
         }
 
-        /// <summary>
-        /// Allows awaiting this object directly.
-        /// </summary>
-        /// <returns></returns>
-        public TaskAwaiter<TResponse> GetAwaiter()
-        {
-            return ResponseAsync.GetAwaiter();
-        }
+        ///// <summary>
+        ///// Allows awaiting this object directly.
+        ///// </summary>
+        ///// <returns></returns>
+        //public TaskAwaiter<TResponse> GetAwaiter()
+        //{
+        //    return ResponseAsync.GetAwaiter();
+        //}
 
         /// <summary>
         /// Gets the call status if the call has already finished.
